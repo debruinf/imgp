@@ -1,0 +1,7 @@
+[package]
+name = "imgp"
+version = "0.1.0"
+authors = ["debruinf <fdebruin.prive@gmail.com>"]
+
+[dependencies]
+image = "0.20.0"
