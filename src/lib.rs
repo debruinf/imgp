@@ -42,6 +42,23 @@ impl Config {
     }
 }
 
+struct Dimension {
+    width: u32,
+    height: u32,
+}
+
+impl Dimension {
+    fn new(arg: &str) -> Result<Dimension, &'static str> {
+        let a = arg.split("x");
+        let v: Vec<&str> = a.collect();
+        let width: u32 = v[0].parse::<u32>().unwrap();
+        let height: u32 = v[1].parse::<u32>().unwrap();
+        println!("New image will be {:?} by {:?}", width, height);
+        Ok(Dimension{width, height})
+    } 
+}
+
+
 pub fn run(img_path: &String, input: Input) {
     let source_img = image::open(img_path).unwrap_or_else(|_err| {
         println!("No image at path '{}'", img_path);
@@ -63,21 +80,21 @@ pub fn run(img_path: &String, input: Input) {
 
     for c in &input.flags {
         match &c.command[..] {
+            "-d" => print!(""),
             "-r" => {
                 rotate(&copied_img, &c.instruction, &destination);
-                println!("Rotated!")
             },
-            "-s" => println!("Resized"),
-            "-sf" => println!("Resize forced"),
-            // "-r" => rotate(&img, &c.instruction, &img_path),
-        //     "-s" => size(img, &config.instruction, &img_path),
-        //     "-sf" => size_forced(img, &config.instruction, &img_path),
+            "-s" => {
+                size(&copied_img, &c.instruction, &destination);
+            },
+            "-sf" => {
+                size_forced(&copied_img, &c.instruction, &destination);
+            },
             _ => {
                 println!("Unknown flag");
             }
         };
     };
-    println!("Hellow orld!")
 }
 
 pub fn check_min_length(args: &Vec<String>) -> Result<(), &'static str> {
@@ -129,6 +146,20 @@ fn rotate(img: &image::DynamicImage, direction: &str, destination: &str) -> Resu
     };
 
     new_img.save(destination)?;
-    println!("Image copied to {}", destination);
+    Ok(())
+}
+
+fn size(img: &image::DynamicImage, dimensions: &str, copy_path: &str) -> Result<(), Box<Error>> {
+    let dim = Dimension::new(dimensions).unwrap();
+    let new_img = img.resize(dim.width, dim.height, image::FilterType::Nearest); 
+    new_img.save(copy_path)?;
+    Ok(())
+}
+
+
+fn size_forced(img: &image::DynamicImage, dimensions: &str, copy_path: &str) -> Result<(), Box<Error>> {
+    let dim = Dimension::new(dimensions).unwrap();
+    let new_img = img.resize_exact(dim.width, dim.height, image::FilterType::Nearest); 
+    new_img.save(copy_path)?;
     Ok(())
 }

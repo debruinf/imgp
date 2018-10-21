@@ -7,7 +7,6 @@ use imgp::Input;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
-    println!("{:?}", args);
 
     if let Err(err) = imgp::check_min_length(&args) {
         println!("Something went wrong: {}", err);
