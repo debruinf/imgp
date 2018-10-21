@@ -9,9 +9,10 @@ Two main reasons:
 2. Too many times I had to open up some heavy duty image processing program (Photoshop, Previewer, etc) do some very simple image transformation such as rotation or a resize.
 
 ### Usage
-See `> imgp -h` for all instructions but here is the gist of it:
+See `$ imgp -h` for all instructions but here is the gist of it:
 
-`> imgp <source> -d <destination> -...
+`$ imgp <source> -d <destination> ...`
+
 
 ### What it does
 Currently supported:
@@ -19,5 +20,7 @@ Currently supported:
 - copying
 - rotating
 - resizing
+
+Supported file formats: See [image](https://docs.rs/image/0.20.0/image/) documentation but basically the usual (i.e. bmp, gif, jpeg, png, tiff and a bunch more).
 
 ### Installation
